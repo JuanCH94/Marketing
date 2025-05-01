@@ -8,3 +8,14 @@ def clean(title):
     title_clean = re.sub(r'\s*\(.*?\)', '', title).strip()
     return pd.Series([title_clean, year])
 
+
+def separar(conexion):
+    query = """
+        SELECT
+            SUBSTR(title, 1, INSTR(title, '(') - 2) AS movie_title,
+            SUBSTR(title, INSTR(title, '(') + 1, INSTR(title, ')') - INSTR(title, '(') - 1) AS Year, genres
+        FROM movies
+    """
+    return pd.read_sql_query(query, conexion)
+
+
